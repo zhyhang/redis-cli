@@ -1,2 +1,2 @@
-# redis-cli
-Cross platform redis-cli.
+# redis-client
+Cross platform redis client.
