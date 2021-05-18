@@ -20,7 +20,7 @@ import (
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/zhyhang/redic/terminal"
+	"github.com/zhyhang/redis-client/terminal"
 	"os"
 )
 
@@ -30,8 +30,8 @@ var InputFlags = terminal.NewCmdFlags()
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Version: "1.0.0",
-	Use:   "redis-client",
-	Short: "redis client to connect and manage redis server",
+	Use:     "redis-client",
+	Short:   "redis client to connect and manage redis server",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
 
@@ -63,10 +63,10 @@ func init() {
 	// will be global for your application.
 
 	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.redic.yaml)")
-	rootCmd.PersistentFlags().StringVarP(&InputFlags.Host, "host","h","127.0.0.1","Server hostname")
-	rootCmd.PersistentFlags().IntVarP(&InputFlags.Port,"port","p",6379,"Server port")
-	rootCmd.PersistentFlags().BoolVarP(&InputFlags.ReturnError,"return-with-error","e",false,"Return exit error code when command execution fails")
-	rootCmd.PersistentFlags().Bool("help",false,"Output this help and exit")
+	rootCmd.PersistentFlags().StringVarP(&InputFlags.Host, "host", "h", "127.0.0.1", "Server hostname")
+	rootCmd.PersistentFlags().IntVarP(&InputFlags.Port, "port", "p", 6379, "Server port")
+	rootCmd.PersistentFlags().BoolVarP(&InputFlags.ReturnError, "return-with-error", "e", false, "Return exit error code when command execution fails")
+	rootCmd.PersistentFlags().Bool("help", false, "Output this help and exit")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

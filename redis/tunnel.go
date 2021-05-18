@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/zhyhang/redic/util"
+	"github.com/zhyhang/redis-client/util"
 	"net"
 	"strconv"
 	"time"
@@ -43,7 +43,7 @@ func Establish(host string, port int) *Tunnel {
 	}
 }
 
-func (tun *Tunnel) Destroy() error{
+func (tun *Tunnel) Destroy() error {
 	if tun.Linked {
 		err := tun.conn.Close()
 		tun.Linked = false

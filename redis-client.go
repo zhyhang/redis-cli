@@ -16,13 +16,11 @@ limitations under the License.
 package main
 
 import (
-	"github.com/zhyhang/redic/cmd"
-	"github.com/zhyhang/redic/platform"
+	"github.com/zhyhang/redis-client/cmd"
+	"github.com/zhyhang/redis-client/platform"
 )
 
 func main() {
 	defer platform.HandleExit()
 	cmd.Execute()
 }
-
-

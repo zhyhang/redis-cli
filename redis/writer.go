@@ -1,4 +1,5 @@
 package redis
+
 import (
 	"encoding"
 	"fmt"
@@ -6,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/zhyhang/redic/util"
+	"github.com/zhyhang/redis-client/util"
 )
 
 type writer interface {

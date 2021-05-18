@@ -6,7 +6,7 @@ import (
 	"io"
 	"strconv"
 
-	"github.com/zhyhang/redic/util"
+	"github.com/zhyhang/redis-client/util"
 )
 
 const (

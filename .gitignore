@@ -1,3 +1,6 @@
+### Build output
+redis-client
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -22,3 +25,4 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+

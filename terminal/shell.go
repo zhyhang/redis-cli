@@ -3,8 +3,8 @@ package terminal
 import (
 	"fmt"
 	prompt "github.com/c-bata/go-prompt"
-	"github.com/zhyhang/redic/platform"
-	"github.com/zhyhang/redic/redis"
+	"github.com/zhyhang/redis-client/platform"
+	"github.com/zhyhang/redis-client/redis"
 	"os"
 	"strings"
 )
@@ -36,7 +36,7 @@ func Exit() {
 }
 
 func exec(input string) {
-	trimInput :=strings.TrimSpace(input)
+	trimInput := strings.TrimSpace(input)
 	if trimInput == "" {
 		return
 	}
@@ -52,13 +52,12 @@ func exec(input string) {
 	fmt.Println(result)
 }
 
-func getCmd(in string) string{
-	return strings.Split(in," ")[0]
+func getCmd(in string) string {
+	return strings.Split(in, " ")[0]
 }
 
 func suggestNothing(in prompt.Document) []prompt.Suggest {
-	return []prompt.Suggest{
-	}
+	return []prompt.Suggest{}
 }
 
 func suggest(in prompt.Document) []prompt.Suggest {
