@@ -3,9 +3,7 @@ package terminal
 import (
 	"fmt"
 	prompt "github.com/c-bata/go-prompt"
-	"github.com/zhyhang/redis-client/platform"
 	"github.com/zhyhang/redis-client/redis"
-	"os"
 	"strings"
 )
 
@@ -26,22 +24,17 @@ func Run(flags *CmdFlags) {
 	p.Run()
 }
 
-func Exit() {
-	err := tunnel.Destroy()
-	if err != nil {
-		os.Exit(1)
-	}
-	platform.HandleExit()
-	os.Exit(0)
-}
-
 func exec(input string) {
 	trimInput := strings.TrimSpace(input)
 	if trimInput == "" {
 		return
 	}
-	if exitSignal(getCmd(trimInput)) {
-		Exit()
+	inputs := getInputs(trimInput)
+	// run local command function if it is in the map
+	localCmdFun := localCmdFunMap[inputs.Cmd]
+	if localCmdFun != nil {
+		localCmdFun(inputs)
+		return
 	}
 	result, err := tunnel.Request(trimInput)
 	if err != nil {
@@ -52,8 +45,16 @@ func exec(input string) {
 	fmt.Println(result)
 }
 
-func getCmd(in string) string {
-	return strings.Split(in, " ")[0]
+func getInputs(in string) *Inputs {
+	i := strings.Fields(in)
+	c := i[0]
+	lc := strings.ToLower(c)
+	return &Inputs{
+		TextTrim: in,
+		RawCmd:   c,
+		Cmd:      lc,
+		Args:     i[1:],
+	}
 }
 
 func suggestNothing(in prompt.Document) []prompt.Suggest {
