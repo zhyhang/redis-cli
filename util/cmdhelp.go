@@ -3,11 +3,11 @@ package util
 /* copy from redis/src/help.h */
 
 type CommandHelp struct {
-	name    string
-	params  string
-	summary string
-	group   int
-	since   string
+	Name    string
+	Params  string
+	Summary string
+	Group   int
+	Since   string
 }
 
 func GetCommandGroups() []string {
@@ -30,8 +30,8 @@ func GetCommandGroups() []string {
 	}
 }
 
-func GetCommandHelps() []*CommandHelp {
-	return []*CommandHelp{
+func GetCommandHelps() []CommandHelp {
+	return []CommandHelp{
 		{"ACL CAT",
 			"[categoryname]",
 			"List the ACL categories or the commands inside a category",

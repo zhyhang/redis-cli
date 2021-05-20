@@ -22,6 +22,7 @@ and settings.
 `
 	ShellHelp = CmdUsage + " " + Version + `
 To get help about Redis commands type:
+      "help @all" to get all commands
       "help @<group>" to get a list of commands in <group>
       "help <command>" for help on <command>
       "help <tab>" to get a list of possible help topics
@@ -32,4 +33,5 @@ To set redis-cli preferences:
       ":set nohints" disable online hints
 Set your preferences in ~/.redisclientrc
 `
+	ShellHelpAll = "@all"
 )
