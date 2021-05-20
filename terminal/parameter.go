@@ -6,8 +6,8 @@ type CmdFlags struct {
 	ReturnError bool
 }
 
-type Inputs struct {
-	TextTrim string   `json:"text_trim"`
+type ShellInputs struct {
+	LineTrim string   `json:"line_trim"`
 	RawCmd   string   `json:"raw_cmd"`
 	Cmd      string   `json:"cmd"`
 	Args     []string `json:"args"`

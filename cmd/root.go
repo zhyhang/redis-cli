@@ -21,6 +21,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zhyhang/redis-client/terminal"
+	"github.com/zhyhang/redis-client/util"
 	"os"
 )
 
@@ -29,15 +30,11 @@ var InputFlags = terminal.NewCmdFlags()
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Version: "1.0.0",
-	Use:     "redis-client",
-	Short:   "redis client to connect and manage redis server",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Version: util.Version,
+	Use:     util.CmdUsage,
+	Short:   util.CmdShort,
+	Long:    util.CmdLong,
+	Example: util.CmdExample,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
@@ -67,7 +64,6 @@ func init() {
 	rootCmd.PersistentFlags().IntVarP(&InputFlags.Port, "port", "p", 6379, "Server port")
 	rootCmd.PersistentFlags().BoolVarP(&InputFlags.ReturnError, "return-with-error", "e", false, "Return exit error code when command execution fails")
 	rootCmd.PersistentFlags().Bool("help", false, "Output this help and exit")
-
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")

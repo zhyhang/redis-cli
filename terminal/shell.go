@@ -4,6 +4,7 @@ import (
 	"fmt"
 	prompt "github.com/c-bata/go-prompt"
 	"github.com/zhyhang/redis-client/redis"
+	"github.com/zhyhang/redis-client/util"
 	"strings"
 )
 
@@ -17,7 +18,7 @@ func Run(flags *CmdFlags) {
 		suggestNothing,
 		prompt.OptionPrefix(prefix),
 		prompt.OptionLivePrefix(changeLivePrefix),
-		prompt.OptionTitle("Redis client"),
+		prompt.OptionTitle(util.ShellTitle),
 		prompt.OptionMaxSuggestion(1),
 		prompt.OptionPrefixTextColor(prompt.Green),
 	)
@@ -33,8 +34,9 @@ func exec(input string) {
 	// run local command function if it is in the map
 	localCmdFun := localCmdFunMap[inputs.Cmd]
 	if localCmdFun != nil {
-		localCmdFun(inputs)
-		return
+		if !localCmdFun(inputs) {
+			return
+		}
 	}
 	result, err := tunnel.Request(trimInput)
 	if err != nil {
@@ -45,12 +47,12 @@ func exec(input string) {
 	fmt.Println(result)
 }
 
-func getInputs(in string) *Inputs {
+func getInputs(in string) *ShellInputs {
 	i := strings.Fields(in)
 	c := i[0]
 	lc := strings.ToLower(c)
-	return &Inputs{
-		TextTrim: in,
+	return &ShellInputs{
+		LineTrim: in,
 		RawCmd:   c,
 		Cmd:      lc,
 		Args:     i[1:],
