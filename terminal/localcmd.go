@@ -68,14 +68,22 @@ func shellHelp(inputs *ShellInputs) (continueRemote bool) {
 		return
 	}
 	arg0 := strings.ToLower(inputs.Args[0])
+	cmdHelps := util.GetCommandHelps()
 	if arg0 == util.ShellHelpAll {
-		for i := 0; i < len(util.GetCommandHelps()); i++ {
+		for i := 0; i < len(cmdHelps); i++ {
 			printGroupCmdHelp(i)
 		}
 		return
 	}
 	if arg0[0] == '@' {
 		findPrintGroupCmdHelp(arg0[1:])
+		return
+	}
+	lowerLine := strings.ToLower(inputs.LineTrim)
+	lineArgs := strings.TrimPrefix(lowerLine, inputs.Cmd)
+	if ci, ok := util.CmdHelpMap[strings.TrimSpace(lineArgs)]; ok {
+		ch := cmdHelps[ci]
+		printCmdHelp(ch)
 		return
 	}
 	return
@@ -101,5 +109,5 @@ func printGroupCmdHelp(gi int) {
 }
 
 func printCmdHelp(cmdHelp util.CommandHelp) {
-	fmt.Printf("\n  %s %s\n  summary: %s\n  since: %s\n", cmdHelp.Name, cmdHelp.Params, cmdHelp.Summary, cmdHelp.Since)
+	fmt.Printf("\n  %s %s\n  summary: %s\n  since: %s\n\n", cmdHelp.Name, cmdHelp.Params, cmdHelp.Summary, cmdHelp.Since)
 }

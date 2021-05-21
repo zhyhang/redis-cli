@@ -15,11 +15,11 @@ func Run(flags *CmdFlags) {
 	prefix, _ := changeLivePrefix()
 	p := prompt.New(
 		exec,
-		suggestNothing,
+		suggest,
 		prompt.OptionPrefix(prefix),
 		prompt.OptionLivePrefix(changeLivePrefix),
 		prompt.OptionTitle(util.ShellTitle),
-		prompt.OptionMaxSuggestion(1),
+		prompt.OptionMaxSuggestion(5),
 		prompt.OptionPrefixTextColor(prompt.Green),
 	)
 	p.Run()
@@ -59,18 +59,29 @@ func getInputs(in string) *ShellInputs {
 	}
 }
 
-func suggestNothing(in prompt.Document) []prompt.Suggest {
-	return []prompt.Suggest{}
+func suggest(in prompt.Document) []prompt.Suggest {
+	key := in.LastKeyStroke()
+	if key == prompt.Escape {
+		return suggestNothing(in)
+	}
+	line := in.CurrentLine()
+	if line == "" && key != prompt.Down {
+		return suggestNothing(in)
+	}
+	beforeCursor := in.CurrentLineBeforeCursor()
+	lowerBefore := strings.TrimSpace(strings.ToLower(beforeCursor))
+	if i, ok := util.CmdHelpMap[lowerBefore]; ok {
+		ch := util.CmdSuggests[i]
+		return []prompt.Suggest{
+			ch,
+		}
+	}
+	s := util.CmdSuggests
+	return prompt.FilterHasPrefix(s, beforeCursor, true)
 }
 
-func suggest(in prompt.Document) []prompt.Suggest {
-	s := []prompt.Suggest{
-		{Text: "users", Description: "Store the username and age"},
-		{Text: "articles", Description: "Store the article text posted by user"},
-		{Text: "comments", Description: "Store the text commented to articles"},
-		{Text: "groups", Description: "Combine users with specific rules"},
-	}
-	return prompt.FilterHasPrefix(s, in.GetWordBeforeCursor(), true)
+func suggestNothing(in prompt.Document) []prompt.Suggest {
+	return []prompt.Suggest{}
 }
 
 func changeLivePrefix() (string, bool) {

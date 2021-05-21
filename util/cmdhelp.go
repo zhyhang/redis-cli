@@ -1,6 +1,10 @@
 package util
 
+import "strings"
+
 /* copy from redis/src/help.h */
+
+var CmdHelpMap = makeCmdHelpMap()
 
 type CommandHelp struct {
 	Name    string
@@ -1438,4 +1442,13 @@ func GetCommandHelps() []CommandHelp {
 			4,
 			"2.0.0"},
 	}
+}
+
+func makeCmdHelpMap() map[string]int {
+	helps := GetCommandHelps()
+	hm := make(map[string]int, len(helps))
+	for i, h := range helps {
+		hm[strings.ToLower(h.Name)] = i
+	}
+	return hm
 }
