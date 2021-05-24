@@ -69,13 +69,13 @@ func suggest(in prompt.Document) []prompt.Suggest {
 		return suggestNothing(in)
 	}
 	beforeCursor := in.CurrentLineBeforeCursor()
-	lowerBefore := strings.TrimSpace(strings.ToLower(beforeCursor))
-	if i, ok := util.CmdHelpMap[lowerBefore]; ok {
-		ch := util.CmdSuggests[i]
-		return []prompt.Suggest{
-			ch,
-		}
-	}
+	//lowerBefore := strings.TrimSpace(strings.ToLower(beforeCursor))
+	//if i, ok := util.CmdHelpMap[lowerBefore]; ok {
+	//	ch := util.CmdSuggests[i]
+	//	return []prompt.Suggest{
+	//		ch,
+	//	}
+	//}
 	s := util.CmdSuggests
 	return prompt.FilterHasPrefix(s, beforeCursor, true)
 }
