@@ -68,16 +68,23 @@ func suggest(in prompt.Document) []prompt.Suggest {
 	if line == "" && key != prompt.Down {
 		return suggestNothing(in)
 	}
-	beforeCursor := in.CurrentLineBeforeCursor()
-	//lowerBefore := strings.TrimSpace(strings.ToLower(beforeCursor))
-	//if i, ok := util.CmdHelpMap[lowerBefore]; ok {
-	//	ch := util.CmdSuggests[i]
-	//	return []prompt.Suggest{
-	//		ch,
-	//	}
-	//}
-	s := util.CmdSuggests
-	return prompt.FilterHasPrefix(s, beforeCursor, true)
+	before := strings.TrimSpace(in.CurrentLineBeforeCursor())
+	beforeWord := in.GetWordBeforeCursor()
+	css := util.CmdSuggests
+	bss := prompt.FilterHasPrefix(css, before, true)
+	if before == beforeWord {
+		return bss
+	}
+	beforeTrim := strings.TrimSuffix(before, beforeWord)
+	bss = prompt.FilterHasPrefix(css, beforeTrim, true)
+	rss := make([]prompt.Suggest, 0, len(bss))
+	for _, s := range bss {
+		newText := strings.TrimSpace(strings.TrimPrefix(s.Text, strings.ToUpper(beforeTrim)))
+		if newText != "" {
+			rss = append(rss, prompt.Suggest{newText, s.Description})
+		}
+	}
+	return prompt.FilterHasPrefix(rss, beforeWord, true)
 }
 
 func suggestNothing(in prompt.Document) []prompt.Suggest {
