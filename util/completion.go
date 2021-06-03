@@ -28,7 +28,10 @@ func createHelpLocalCmdSuggests() []prompt.Suggest {
 		})
 	}
 	for _, s := range CmdSuggests {
-		ss = append(ss, s)
+		ss = append(ss, prompt.Suggest{
+			s.Text,
+			"",
+		})
 	}
 	return ss
 }
