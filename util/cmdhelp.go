@@ -5,6 +5,7 @@ import "strings"
 /* copy from redis/src/help.h */
 
 var CmdHelpMap = makeCmdHelpMap()
+var CmdHelps = GetCommandHelps()
 
 type CommandHelp struct {
 	Name    string
