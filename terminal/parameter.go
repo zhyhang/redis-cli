@@ -7,12 +7,22 @@ type CmdFlags struct {
 }
 
 type ShellInputs struct {
-	LineTrim string   `json:"line_trim"`
-	RawCmd   string   `json:"raw_cmd"`
-	Cmd      string   `json:"cmd"`
-	Args     []string `json:"args"`
+	LineTrim string `json:"line_trim"`
+	RawCmd   string `json:"raw_cmd"`
+	// lower case first one word of input
+	Cmd  string   `json:"cmd"`
+	Args []string `json:"args"`
+}
+
+type shellConfig struct {
+	cmdLine     *CmdFlags
+	modeMonitor bool
 }
 
 func NewCmdFlags() *CmdFlags {
 	return &CmdFlags{Host: "127.0.0.1", Port: 6379, ReturnError: false}
+}
+
+func newShellConfig() *shellConfig {
+	return &shellConfig{}
 }

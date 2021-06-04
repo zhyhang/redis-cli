@@ -9,8 +9,10 @@ import (
 )
 
 var tunnel *redis.Tunnel
+var config = newShellConfig()
 
 func Run(flags *CmdFlags) {
+	config.cmdLine = flags
 	tunnel = redis.Establish(flags.Host, flags.Port)
 	prefix, _ := changeLivePrefix()
 	p := prompt.New(
@@ -26,11 +28,16 @@ func Run(flags *CmdFlags) {
 }
 
 func exec(input string) {
+	if isIgnoreInput() {
+		return
+	}
 	trimInput := strings.TrimSpace(input)
 	if trimInput == "" {
 		return
 	}
 	inputs := getInputs(trimInput)
+	// update config by input info
+	updateConf(inputs, config)
 	// run local command function if it is in the map
 	localCmdFun := localCmdFunMap[inputs.Cmd]
 	if localCmdFun != nil {
@@ -40,11 +47,24 @@ func exec(input string) {
 	}
 	result, err := tunnel.Request(trimInput)
 	if err != nil {
-		tunnel.Linked = false
 		fmt.Println(err.Error())
 		return
 	}
 	fmt.Println(result)
+	if config.modeMonitor {
+		go exeKeepaliveCmd()
+	}
+}
+
+func exeKeepaliveCmd() {
+	for {
+		reading, err := tunnel.KeepReading()
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+		fmt.Println(reading)
+	}
 }
 
 func getInputs(in string) *ShellInputs {
@@ -60,6 +80,9 @@ func getInputs(in string) *ShellInputs {
 }
 
 func suggest(in prompt.Document) []prompt.Suggest {
+	if isIgnoreInput() {
+		return suggestNothing(in)
+	}
 	key := in.LastKeyStroke()
 	if key == prompt.Escape {
 		return suggestNothing(in)
@@ -165,9 +188,16 @@ func suggestNothing(in prompt.Document) []prompt.Suggest {
 }
 
 func changeLivePrefix() (string, bool) {
+	if isIgnoreInput() {
+		return "", true
+	}
 	if tunnel.Linked {
 		return tunnel.Address + "> ", true
 	} else {
 		return "not connected>", true
 	}
+}
+
+func isIgnoreInput() bool {
+	return config.modeMonitor
 }

@@ -76,6 +76,15 @@ func (tun *Tunnel) Request(cmd string) (string, error) {
 	return strReply, nil
 }
 
+func (tun *Tunnel) KeepReading() (string, error) {
+	strReply, err := tun.reader.ReadCmdText()
+	if err != nil {
+		tun.Destroy()
+		return "", err
+	}
+	return strReply, nil
+}
+
 func address(host string, port int) string {
 	return host + ":" + strconv.Itoa(port)
 }
