@@ -151,7 +151,7 @@ func suggestCanFilterCmd(in prompt.Document) (ss []prompt.Suggest, found bool) {
 func suggestLocalCmd(in prompt.Document) (ss []prompt.Suggest) {
 	fields := strings.Fields(in.TextBeforeCursor())
 	localCmd := strings.ToLower(fields[0])
-	if localCmd == "help" {
+	if localCmd == "help" || localCmd == "?" {
 		if len(fields) == 1 && strings.HasSuffix(in.TextBeforeCursor(), " ") {
 			return util.LocalHelpCmdSuggests
 		} else if len(fields) == 2 && !strings.HasSuffix(in.TextBeforeCursor(), " ") {
